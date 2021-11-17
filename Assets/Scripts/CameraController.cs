@@ -8,6 +8,6 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        transform.position = focus.transform.position - offset;
+        transform.position = new Vector3(offset.x, offset.y, focus.transform.position.z - offset.z);
     }
 }

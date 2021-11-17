@@ -78,7 +78,8 @@ public class ThingSpawner : MonoBehaviour
     {
         GameObject obj = Instantiate(prefab);
         Vector3 pos = player.transform.position;
-        obj.transform.position = new Vector3(laneThing.GetLanePos(GetRandomLane()), pos.y, pos.z + spawnDistance);
+        Vector2 circlePos = laneThing.GetLanePos(GetRandomLane());
+        obj.transform.position = new Vector3(circlePos.x, circlePos.y, pos.z + spawnDistance);
         obj.GetComponent<InteractableThing>().SetPlayer(player);
     }
 }
