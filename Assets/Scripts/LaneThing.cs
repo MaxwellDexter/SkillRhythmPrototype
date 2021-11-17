@@ -49,4 +49,30 @@ public class LaneThing : MonoBehaviour
         if (laneAmount != lanes.Count)
             UpdateLanes();
     }
+
+    private int GetNewLane(int laneNum, bool wantToMoveRight)
+    {
+        return laneNum + (wantToMoveRight ? 1 : -1);
+    }
+
+    private bool CanMove(int laneNum, bool wantToMoveRight)
+    {
+        int newLane = GetNewLane(laneNum, wantToMoveRight);
+        if (newLane < 0 || newLane >= laneAmount)
+            return false;
+        return true;
+    }
+
+    public int ChangeLanes(bool wantToMoveRight)
+    {
+        int currentLane = GetComponent<PlayerMovement>().currentLane;
+        if (CanMove(currentLane, wantToMoveRight))
+        {
+            int newLane = GetNewLane(currentLane, wantToMoveRight);
+            transform.position = new Vector3(lanes[newLane], transform.position.y, transform.position.z);
+            return newLane;
+        }
+        else
+            return currentLane;
+    }
 }
