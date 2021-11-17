@@ -1,14 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ThingSpawner : MonoBehaviour
 {
+    public enum LaneOptions
+    {
+        Obstacle,
+        Pickup,
+        Empty
+    }
+
     public GameObject player;
     public GameObject obstaclePrefab;
+    public GameObject pickupPrefab;
 
     public float spawnDistance;
-    public int obstacleSpawnAmount;
 
     public float timeBetweenSpawns;
     private float timeAtLastSpawn;
@@ -32,8 +40,36 @@ public class ThingSpawner : MonoBehaviour
     {
         if (timeAtLastSpawn + timeBetweenSpawns < Time.time)
         {
-            for (int i = 0; i < obstacleSpawnAmount; i++)
-                Spawn(obstaclePrefab);
+            // make a list with an empty space and a pick up
+            List<LaneOptions> options = new List<LaneOptions> { LaneOptions.Pickup, LaneOptions.Empty };
+            // add obstacles to fill the space
+            for (int i = 0; i < laneThing.laneAmount - 2; i++)
+                options.Add(LaneOptions.Obstacle);
+            // shuffle it
+            // from https://forum.unity.com/threads/clever-way-to-shuffle-a-list-t-in-one-line-of-c-code.241052/
+            List<LaneOptions> shuffled = options.OrderBy(x => Random.value).ToList();
+
+            // sanity check
+            if (shuffled.Count != laneThing.laneAmount)
+                Debug.LogError($"The shuffled list had a different amount ({shuffled.Count}) to the lane amount ({laneThing.laneAmount})!");
+
+            // spawn the things
+            foreach (LaneOptions option in shuffled)
+            {
+                switch (option)
+                {
+                    case LaneOptions.Empty:
+                        break;
+                    case LaneOptions.Obstacle:
+                        Spawn(obstaclePrefab);
+                        break;
+                    case LaneOptions.Pickup:
+                        Spawn(pickupPrefab);
+                        break;
+                }
+            }
+
+            // update time
             timeAtLastSpawn = Time.time;
         }
     }

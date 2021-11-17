@@ -248,8 +248,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2028172889}
   obstaclePrefab: {fileID: 1170459986578694609, guid: 0a1ebe93484fe4139ae0ce025bdae699, type: 3}
+  pickupPrefab: {fileID: 1170459986578694609, guid: 6aee6c6984f244739a97a3ea94289b3f, type: 3}
   spawnDistance: 40
-  obstacleSpawnAmount: 3
   timeBetweenSpawns: 2
 --- !u!4 &936865503
 Transform:

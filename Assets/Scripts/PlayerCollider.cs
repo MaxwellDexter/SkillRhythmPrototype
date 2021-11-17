@@ -11,5 +11,10 @@ public class PlayerCollider : MonoBehaviour
             Debug.Log("Ouch!");
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
+        else if (other.CompareTag("Pickup"))
+        {
+            Debug.Log("Yummy!!");
+            other.GetComponent<InteractableThing>().GetDoneSon();
+        }
     }
 }
