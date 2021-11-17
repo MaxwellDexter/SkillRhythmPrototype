@@ -75,4 +75,17 @@ public class LaneThing : MonoBehaviour
         else
             return currentLane;
     }
+
+    public float GetLanePos(int index)
+    {
+        if (index < 0 || index >= laneAmount)
+        {
+            Debug.LogWarning("Something tried to get a bad lane index");
+            return lanes[0];
+        }
+        else
+        {
+            return lanes[index];
+        }
+    }
 }
