@@ -495,6 +495,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focus: {fileID: 2028172889}
   offset: {x: 0, y: 0, z: 12}
+  leanAmount: 1
+  leanSpeed: 3
 --- !u!1 &1273368860
 GameObject:
   m_ObjectHideFlags: 0

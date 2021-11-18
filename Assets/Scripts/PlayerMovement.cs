@@ -20,12 +20,10 @@ public class PlayerMovement : MonoBehaviour
         laneThing = GetComponent<LaneThing>();
         currentRotation = 0f;
         moveSpeed = 19.8f;//(float)(spawner.spawnDistance / (TempoUtils.FlipBpmInterval(45) * 2));
-        Debug.Log(moveSpeed);
     }
 
     private void Update()
     {
-        Debug.Log(moveSpeed);
         // move forward
         transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
 
@@ -36,12 +34,12 @@ public class PlayerMovement : MonoBehaviour
     private bool GetRotateInput()
     {
         bool moved = false;
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             currentRotation -= rotateSpeed * Time.deltaTime;
             moved = true;
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.LeftArrow))
         {
             currentRotation += rotateSpeed * Time.deltaTime;
             moved = true;
