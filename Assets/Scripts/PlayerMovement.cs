@@ -73,7 +73,6 @@ public class PlayerMovement : MonoBehaviour
         if (clamped < 0)
             clamped *= -1;
         // convert to degrees
-        Debug.Log(clamped * Mathf.Rad2Deg);
         return clamped * Mathf.Rad2Deg;
     }
 }

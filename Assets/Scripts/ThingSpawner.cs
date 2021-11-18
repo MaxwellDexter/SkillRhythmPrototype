@@ -54,17 +54,18 @@ public class ThingSpawner : MonoBehaviour
                 Debug.LogError($"The shuffled list had a different amount ({shuffled.Count}) to the lane amount ({laneThing.laneAmount})!");
 
             // spawn the things
-            foreach (LaneOptions option in shuffled)
+            for (int i = 0; i < laneThing.laneAmount; i++)
             {
+                LaneOptions option = shuffled[i];
                 switch (option)
                 {
                     case LaneOptions.Empty:
                         break;
                     case LaneOptions.Obstacle:
-                        Spawn(obstaclePrefab);
+                        Spawn(obstaclePrefab, i);
                         break;
                     case LaneOptions.Pickup:
-                        Spawn(pickupPrefab);
+                        Spawn(pickupPrefab, i);
                         break;
                 }
             }
@@ -74,11 +75,11 @@ public class ThingSpawner : MonoBehaviour
         }
     }
 
-    private void Spawn(GameObject prefab)
+    private void Spawn(GameObject prefab, int lane)
     {
         GameObject obj = Instantiate(prefab);
         Vector3 pos = player.transform.position;
-        Vector2 circlePos = laneThing.GetLanePos(GetRandomLane());
+        Vector2 circlePos = laneThing.GetLanePos(lane);
         obj.transform.position = new Vector3(circlePos.x, circlePos.y, pos.z + spawnDistance);
         obj.GetComponent<InteractableThing>().SetPlayer(player);
     }
