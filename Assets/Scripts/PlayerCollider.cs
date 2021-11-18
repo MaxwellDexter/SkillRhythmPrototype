@@ -9,6 +9,8 @@ public class PlayerCollider : MonoBehaviour
     private float suckingTime;
     private float suckCooldown;
 
+    private AudioManagerMini audio;
+
     public bool Sucking
     {
         get { return suckingTime > 0; }
@@ -20,6 +22,11 @@ public class PlayerCollider : MonoBehaviour
     }
 
     public GameObject sucker;
+
+    private void Start()
+    {
+        audio = GetComponent<AudioManagerMini>();
+    }
 
     private void Update()
     {
@@ -43,20 +50,20 @@ public class PlayerCollider : MonoBehaviour
     {
         if (other.CompareTag("Obstacle"))
         {
-            Debug.Log("Ouch!");
+            audio.Play("Hit");
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
         else if (other.CompareTag("Pickup"))
         {
-            Debug.Log("Yummy!!");
+            audio.Play("Pickup");
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
         else if (other.CompareTag("Trash"))
         {
             if (Sucking)
-                Debug.Log("Delicious!!");
+                audio.Play("Pickup");
             else
-                Debug.Log("Oh my goodness what an unfortunate circumstance I find myself in.");
+                audio.Play("Hit");
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
     }
