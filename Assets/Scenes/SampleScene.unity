@@ -598,6 +598,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 4000
   currentLane: 0
+  rotateSpeed: 5
 --- !u!65 &2028172891
 BoxCollider:
   m_ObjectHideFlags: 0
