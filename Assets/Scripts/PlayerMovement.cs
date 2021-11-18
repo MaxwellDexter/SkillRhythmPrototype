@@ -12,18 +12,22 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rigidBody;
     private LaneThing laneThing;
+    public ThingSpawner spawner;
 
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         laneThing = GetComponent<LaneThing>();
         currentRotation = 0f;
+        moveSpeed = 19.8f;//(float)(spawner.spawnDistance / (TempoUtils.FlipBpmInterval(45) * 2));
+        Debug.Log(moveSpeed);
     }
 
     private void Update()
     {
+        Debug.Log(moveSpeed);
         // move forward
-        rigidBody.velocity = new Vector3(0f, 0f, moveSpeed) * Time.deltaTime;
+        transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
 
         if (GetRotateInput())
             DoRotation();

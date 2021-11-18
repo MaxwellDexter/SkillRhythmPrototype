@@ -15,11 +15,14 @@ public class ThingSpawner : MonoBehaviour
     public GameObject player;
     public GameObject obstaclePrefab;
     public GameObject pickupPrefab;
+    public AudioSource music;
+    public Tempo tempo;
+    private bool musicStarted = false;
 
-    public float spawnDistance;
+    public double spawnDistance;
 
-    public float timeBetweenSpawns;
-    private float timeAtLastSpawn;
+    public double timeBetweenSpawns;
+    private double timeAtLastSpawn;
 
     private LaneThing laneThing;
     private PlayerMovement movement;
@@ -28,7 +31,12 @@ public class ThingSpawner : MonoBehaviour
     {
         laneThing = player.GetComponent<LaneThing>();
         movement = player.GetComponent<PlayerMovement>();
-        timeAtLastSpawn = Time.time;
+        timeAtLastSpawn = AudioSettings.dspTime;
+
+        tempo.OnTempoBeat += SpawnWave;
+        tempo.SetTempo(TempoUtils.FlipBpmInterval(45));
+        music.Play();
+        tempo.StartTempo();
     }
 
     private int GetRandomLane()
@@ -38,40 +46,45 @@ public class ThingSpawner : MonoBehaviour
 
     void Update()
     {
-        if (timeAtLastSpawn + timeBetweenSpawns < Time.time)
+        if (timeAtLastSpawn + timeBetweenSpawns < AudioSettings.dspTime)
         {
-            // make a list with an empty space and a pick up
-            List<LaneOptions> options = new List<LaneOptions> { LaneOptions.Pickup, LaneOptions.Empty };
-            // add obstacles to fill the space
-            for (int i = 0; i < laneThing.laneAmount - 2; i++)
-                options.Add(LaneOptions.Obstacle);
-            // shuffle it
-            // from https://forum.unity.com/threads/clever-way-to-shuffle-a-list-t-in-one-line-of-c-code.241052/
-            List<LaneOptions> shuffled = options.OrderBy(x => Random.value).ToList();
-
-            // sanity check
-            if (shuffled.Count != laneThing.laneAmount)
-                Debug.LogError($"The shuffled list had a different amount ({shuffled.Count}) to the lane amount ({laneThing.laneAmount})!");
-
-            // spawn the things
-            for (int i = 0; i < laneThing.laneAmount; i++)
-            {
-                LaneOptions option = shuffled[i];
-                switch (option)
-                {
-                    case LaneOptions.Empty:
-                        break;
-                    case LaneOptions.Obstacle:
-                        Spawn(obstaclePrefab, i);
-                        break;
-                    case LaneOptions.Pickup:
-                        Spawn(pickupPrefab, i);
-                        break;
-                }
-            }
+            
 
             // update time
-            timeAtLastSpawn = Time.time;
+            timeAtLastSpawn = AudioSettings.dspTime;
+        }
+    }
+
+    private void SpawnWave()
+    {
+        // make a list with an empty space and a pick up
+        List<LaneOptions> options = new List<LaneOptions> { LaneOptions.Pickup, LaneOptions.Empty };
+        // add obstacles to fill the space
+        for (int i = 0; i < laneThing.laneAmount - 2; i++)
+            options.Add(LaneOptions.Obstacle);
+        // shuffle it
+        // from https://forum.unity.com/threads/clever-way-to-shuffle-a-list-t-in-one-line-of-c-code.241052/
+        List<LaneOptions> shuffled = options.OrderBy(x => Random.value).ToList();
+
+        // sanity check
+        if (shuffled.Count != laneThing.laneAmount)
+            Debug.LogError($"The shuffled list had a different amount ({shuffled.Count}) to the lane amount ({laneThing.laneAmount})!");
+
+        // spawn the things
+        for (int i = 0; i < laneThing.laneAmount; i++)
+        {
+            LaneOptions option = shuffled[i];
+            switch (option)
+            {
+                case LaneOptions.Empty:
+                    break;
+                case LaneOptions.Obstacle:
+                    Spawn(obstaclePrefab, i);
+                    break;
+                case LaneOptions.Pickup:
+                    Spawn(pickupPrefab, i);
+                    break;
+            }
         }
     }
 
@@ -80,7 +93,7 @@ public class ThingSpawner : MonoBehaviour
         GameObject obj = Instantiate(prefab);
         Vector3 pos = player.transform.position;
         Vector2 circlePos = laneThing.GetLanePos(lane);
-        obj.transform.position = new Vector3(circlePos.x, circlePos.y, pos.z + spawnDistance);
+        obj.transform.position = new Vector3(circlePos.x, circlePos.y, (float)(pos.z + spawnDistance));
         obj.GetComponent<InteractableThing>().SetPlayer(player);
     }
 }
