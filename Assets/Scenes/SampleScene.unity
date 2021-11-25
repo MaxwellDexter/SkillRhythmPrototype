@@ -678,8 +678,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 25
   currentLane: 0
-  rotateSpeed: 4
+  rotateSpeed: 3
   spawner: {fileID: 936865502}
+  snap: 0
 --- !u!65 &2028172891
 BoxCollider:
   m_ObjectHideFlags: 0

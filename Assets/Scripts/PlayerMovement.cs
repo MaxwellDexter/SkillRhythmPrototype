@@ -9,10 +9,15 @@ public class PlayerMovement : MonoBehaviour
 
     public float rotateSpeed = 0.1f;
     private float currentRotation;
+    private float rotationInput = 0f;
 
     private Rigidbody rigidBody;
     private LaneThing laneThing;
     public ThingSpawner spawner;
+
+    [SerializeField]
+    private bool snap;
+    private bool shouldSnapNow;
 
     private void Start()
     {
@@ -24,35 +29,40 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // move forward
-        transform.Translate(transform.forward * moveSpeed * Time.deltaTime);
-
-        if (GetRotateInput())
-            DoRotation();
+        GetRotateInput();
     }
 
-    private bool GetRotateInput()
+    private void FixedUpdate()
     {
-        bool moved = false;
+        // move forward
+        transform.Translate(transform.forward * moveSpeed * Time.fixedDeltaTime);
+
+        // rotate
+        DoRotation();
+    }
+
+    private void GetRotateInput()
+    {
+        rotationInput = 0f;
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            currentRotation -= rotateSpeed * Time.deltaTime;
-            moved = true;
+            rotationInput = -rotateSpeed;
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
-            currentRotation += rotateSpeed * Time.deltaTime;
-            moved = true;
+            rotationInput = rotateSpeed;
         }
 
         // clamp value from 0 to tau
         // maybe
-
-        return moved;
     }
 
     private void DoRotation()
     {
+        if (rotationInput == 0f)
+            return;
+        currentRotation += rotationInput * Time.fixedDeltaTime;
+
         // from https://stackoverflow.com/questions/839899/how-do-i-calculate-a-point-on-a-circle-s-circumference
         // x = cx + r * cos(a)
         // y = cy + r * sin(a)
