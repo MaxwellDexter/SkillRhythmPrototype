@@ -57,21 +57,13 @@ public class LaneThing : MonoBehaviour
             UpdateLanes();
     }
 
-    private int GetNewLane(int laneNum, bool wantToMoveRight)
+    public int ChangeLanes(int laneNum, bool wantToMoveRight)
     {
         int newLane = laneNum + (wantToMoveRight ? 1 : -1);
         if (newLane >= laneAmount)
             newLane = 0;
         else if (newLane < 0)
             newLane = laneAmount - 1;
-        return newLane;
-    }
-
-    public int ChangeLanes(bool wantToMoveRight)
-    {
-        int newLane = GetNewLane(GetComponent<PlayerMovement>().currentLane, wantToMoveRight);
-        Vector2 pos = lanes[newLane];
-        transform.position = new Vector3(pos.x, pos.y, transform.position.z);
         return newLane;
     }
 
@@ -86,5 +78,24 @@ public class LaneThing : MonoBehaviour
         {
             return lanes[index];
         }
+    }
+
+    public int GetClosestLane(Vector2 pos)
+    {
+        float bestMagnitude = -1f;
+        int closestLane = 0;
+        for (int i = 0; i < lanes.Count; i++)
+        {
+            Vector2 lane = lanes[i];
+            // https://docs.unity3d.com/2018.3/Documentation/Manual/DirectionDistanceFromOneObjectToAnother.html
+            // target - origin
+            Vector2 heading = lane - pos;
+            if (bestMagnitude == -1f || heading.sqrMagnitude < bestMagnitude)
+            {
+                closestLane = i;
+                bestMagnitude = heading.sqrMagnitude;
+            }
+        }
+        return closestLane;
     }
 }

@@ -680,7 +680,9 @@ MonoBehaviour:
   currentLane: 0
   rotateSpeed: 3
   spawner: {fileID: 936865502}
-  snap: 0
+  snap: 1
+  snapSpeed: 10
+  tapSpeed: 0.2
 --- !u!65 &2028172891
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -693,7 +695,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: -2}
 --- !u!23 &2028172892
 MeshRenderer:
   m_ObjectHideFlags: 0

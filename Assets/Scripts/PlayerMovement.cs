@@ -18,6 +18,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private bool snap;
     private bool shouldSnapNow;
+    [SerializeField]
+    private float snapSpeed;
+
+    [SerializeField]
+    private float tapSpeed;
+    private float tapTime;
 
     private void Start()
     {
@@ -29,7 +35,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        GetRotateInput();
+        if (!snap)
+        {
+            GetRotateInput();
+            return;
+        }
+
+        // on key down start timer
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
+            tapTime = Time.time;
+
+        bool shouldRotate = true;
+        // else check for key up and if less than speed do tap
+        if (Time.time - tapTime < tapSpeed)
+            shouldRotate = TapReleaseCheck();
+        // but rotate anyway
+        if (shouldRotate)
+            GetRotateInput();
     }
 
     private void FixedUpdate()
@@ -37,12 +59,14 @@ public class PlayerMovement : MonoBehaviour
         // move forward
         transform.Translate(transform.forward * moveSpeed * Time.fixedDeltaTime);
 
-        // rotate
         DoRotation();
+
+        Snap();
     }
 
     private void GetRotateInput()
     {
+        bool wasMoving = rotationInput != 0f;
         rotationInput = 0f;
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -53,14 +77,41 @@ public class PlayerMovement : MonoBehaviour
             rotationInput = rotateSpeed;
         }
 
+        if (wasMoving && rotationInput == 0f)
+        {
+            shouldSnapNow = true;
+        }
+
         // clamp value from 0 to tau
         // maybe
+    }
+
+    private bool TapReleaseCheck()
+    {
+        if (Input.GetKeyUp(KeyCode.RightArrow))
+        {
+            currentLane = laneThing.ChangeLanes(currentLane, false);
+            shouldSnapNow = false;
+            rotationInput = 0f;
+            Debug.Log("tapped right!");
+            return false;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+        {
+            currentLane = laneThing.ChangeLanes(currentLane, true);
+            shouldSnapNow = false;
+            rotationInput = 0f;
+            Debug.Log("tapped left!");
+            return false;
+        }
+        return true;
     }
 
     private void DoRotation()
     {
         if (rotationInput == 0f)
             return;
+        currentRotation = GetDirection();
         currentRotation += rotationInput * Time.fixedDeltaTime;
 
         // from https://stackoverflow.com/questions/839899/how-do-i-calculate-a-point-on-a-circle-s-circumference
@@ -77,6 +128,34 @@ public class PlayerMovement : MonoBehaviour
         transform.eulerAngles = new Vector3(0f, 0f, GetAngleFromRadians(a));
     }
 
+    private float GetDirection()
+    {
+        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+        Vector2 centre = Vector2.zero;
+        var heading = pos - centre;
+        return Mathf.Deg2Rad * Angle(heading);
+    }
+
+    private float Angle(Vector3 v)
+    {
+        // normalize the vector: this makes the x and y components numerically
+        // equal to the sine and cosine of the angle:
+        v.Normalize();
+        // get the basic angle:
+        var ang = Mathf.Asin(v.y) * Mathf.Rad2Deg;
+        // fix the angle for 2nd and 3rd quadrants:
+        if (v.x < 0)
+        {
+            ang = 180 - ang;
+        }
+        else // fix the angle for 4th quadrant:
+        if (v.y < 0)
+        {
+            ang = 360 + ang;
+        }
+        return ang;
+    }
+
     private float GetAngleFromRadians(float radians)
     {
         // clamp radians
@@ -86,5 +165,24 @@ public class PlayerMovement : MonoBehaviour
             clamped *= -1;
         // convert to degrees
         return clamped * Mathf.Rad2Deg;
+    }
+
+    private void Snap()
+    {
+        if (snap)
+        {
+            Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+            if (shouldSnapNow)
+            {
+                currentLane = laneThing.GetClosestLane(pos);
+                shouldSnapNow = false;
+            }
+            if (rotationInput == 0f) // if not moving
+            {
+                Vector3 newpos = Vector3.Lerp(pos, laneThing.GetLanePos(currentLane), snapSpeed * Mathf.Clamp01(Time.fixedDeltaTime));
+                newpos.z = transform.position.z;
+                transform.position = newpos;
+            }
+        }
     }
 }
