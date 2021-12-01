@@ -17,6 +17,7 @@ public class ThingSpawner : MonoBehaviour
     public GameObject pickupPrefab;
     public AudioSource music;
     public Tempo tempo;
+    public Tempo subdivisionTempo;
     private bool musicStarted = false;
 
     public double spawnDistance;
@@ -35,8 +36,22 @@ public class ThingSpawner : MonoBehaviour
 
         tempo.OnTempoBeat += SpawnWave;
         tempo.SetTempo(TempoUtils.FlipBpmInterval(45));
+        subdivisionTempo.SetTempo(TempoUtils.FlipBpmInterval(180 * 4));
         music.Play();
+#if UNITY_EDITOR
+        StartCoroutine(StartTempo());
+#endif
+#if UNITY_STANDALONE
         tempo.StartTempo();
+        subdivisionTempo.StartTempo();
+#endif
+    }
+
+    private IEnumerator StartTempo()
+    {
+        yield return new WaitForSeconds(.01f);
+        tempo.StartTempo();
+        subdivisionTempo.StartTempo();
     }
 
     private int GetRandomLane()

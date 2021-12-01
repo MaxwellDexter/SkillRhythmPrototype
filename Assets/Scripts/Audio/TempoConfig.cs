@@ -14,13 +14,13 @@ public class TempoConfig : ScriptableObject
 {
     public TimingCalculations timingCalculation;
 
-    [HideInInspector]
+    //[HideInInspector]
     public int subdivisionsPerBeat;
 
-    [HideInInspector]
+    //[HideInInspector]
     public bool[] pattern;
 
-    [HideInInspector]
+    //[HideInInspector]
     public List<TimingOption> timingOptions;
 
     public TempoConfig()

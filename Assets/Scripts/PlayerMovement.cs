@@ -26,12 +26,20 @@ public class PlayerMovement : MonoBehaviour
     private float tapSpeed;
     private float tapTime;
 
+    [SerializeField]
+    private bool quantise;
+    private float inputDirection;
+    public Tempo subdivisionTempo;
+    private SequenceContainer audioClip;
+
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         laneThing = GetComponent<LaneThing>();
         currentRotation = 0f;
         moveSpeed = 19.8f;//(float)(spawner.spawnDistance / (TempoUtils.FlipBpmInterval(45) * 2));
+        subdivisionTempo.OnTempoBeat += DoQuantiseMovement;
+        audioClip = GetComponent<SequenceContainer>();
     }
 
     private void Update()
@@ -41,7 +49,15 @@ public class PlayerMovement : MonoBehaviour
             SceneManager.LoadScene(0);
         if (Input.GetKeyDown(KeyCode.S))
             snap = !snap;
+        if (Input.GetKeyDown(KeyCode.Q))
+            quantise = !quantise;
         // end demo stuff
+
+        if (quantise)
+        {
+            inputDirection = Input.GetAxisRaw("Horizontal");
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -74,6 +90,8 @@ public class PlayerMovement : MonoBehaviour
     {
         // move forward
         transform.Translate(transform.forward * moveSpeed * Time.fixedDeltaTime);
+
+        if (quantise) return;
 
         RotatePlayer();
 
@@ -146,7 +164,12 @@ public class PlayerMovement : MonoBehaviour
         float x = cx + r * Mathf.Cos(a);
         float y = cy + r * Mathf.Sin(a);
         transform.position = new Vector3(x, y, transform.position.z);
-        transform.eulerAngles = new Vector3(0f, 0f, GetAngleFromRadians(a));
+        RotatePlayerTowardsCenter();
+    }
+
+    private void RotatePlayerTowardsCenter()
+    {
+        transform.eulerAngles = new Vector3(0f, 0f, GetAngleFromRadians(currentRotation));
     }
 
     private float GetDirection()
@@ -204,6 +227,23 @@ public class PlayerMovement : MonoBehaviour
                 newpos.z = transform.position.z;
                 transform.position = newpos;
             }
+        }
+    }
+
+    private void DoQuantiseMovement()
+    {
+        if (inputDirection != 0f)
+        {
+            audioClip.Play();
+            bool goingRight = inputDirection < 0;
+            currentLane = laneThing.ChangeLanes(currentLane, goingRight);
+            Vector3 newpos = laneThing.GetLanePos(currentLane);
+            newpos.z = transform.position.z;
+            transform.position = newpos;
+
+            // rotate
+            currentRotation = GetDirection();
+            RotatePlayerTowardsCenter();
         }
     }
 }
