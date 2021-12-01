@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -35,6 +36,21 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        // demo stuff
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene(0);
+        if (Input.GetKeyDown(KeyCode.S))
+            snap = !snap;
+        // end demo stuff
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // flip rotation degress
+            currentRotation -= Mathf.PI;
+            DoRotation();
+            currentLane = laneThing.GetClosestLane(transform.position);
+        }
+
         if (!snap)
         {
             GetRotateInput();
@@ -59,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
         // move forward
         transform.Translate(transform.forward * moveSpeed * Time.fixedDeltaTime);
 
-        DoRotation();
+        RotatePlayer();
 
         Snap();
     }
@@ -107,13 +123,18 @@ public class PlayerMovement : MonoBehaviour
         return true;
     }
 
-    private void DoRotation()
+    private void RotatePlayer()
     {
         if (rotationInput == 0f)
             return;
         currentRotation = GetDirection();
         currentRotation += rotationInput * Time.fixedDeltaTime;
 
+        DoRotation();
+    }
+
+    private void DoRotation()
+    {
         // from https://stackoverflow.com/questions/839899/how-do-i-calculate-a-point-on-a-circle-s-circumference
         // x = cx + r * cos(a)
         // y = cy + r * sin(a)

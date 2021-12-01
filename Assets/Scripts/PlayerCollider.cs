@@ -34,7 +34,7 @@ public class PlayerCollider : MonoBehaviour
         suckingTime -= Time.deltaTime;
         suckCooldown -= Time.deltaTime;
 
-        if (CanSuck && Input.GetKeyDown(KeyCode.Space))
+        if (CanSuck && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)))
         {
             suckingTime = suckActiveTime;
             sucker.SetActive(true);

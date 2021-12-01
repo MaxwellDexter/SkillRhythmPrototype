@@ -681,7 +681,7 @@ MonoBehaviour:
   rotateSpeed: 3
   spawner: {fileID: 936865502}
   snap: 1
-  snapSpeed: 10
+  snapSpeed: 20
   tapSpeed: 0.2
 --- !u!65 &2028172891
 BoxCollider:
