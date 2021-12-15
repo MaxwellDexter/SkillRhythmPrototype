@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class InteractableThing : MonoBehaviour
 {
-    private GameObject player;
+    protected GameObject player;
 
     public void SetPlayer(GameObject player)
     {
         this.player = player;
     }
 
-    void Update()
+    private void Update()
     {
         if (transform.position.z < player.transform.position.z - 10)
             GetDoneSon();

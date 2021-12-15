@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     private float currentRotation;
     private float rotationInput = 0f;
 
-    private Rigidbody rigidBody;
     private LaneThing laneThing;
     public ThingSpawner spawner;
 
@@ -34,7 +33,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        rigidBody = GetComponent<Rigidbody>();
         laneThing = GetComponent<LaneThing>();
         currentRotation = 0f;
         moveSpeed = 19.8f;//(float)(spawner.spawnDistance / (TempoUtils.FlipBpmInterval(45) * 2));

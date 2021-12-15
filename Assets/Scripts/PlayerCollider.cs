@@ -14,6 +14,8 @@ public class PlayerCollider : MonoBehaviour
     private float timeAtKeyDown;
     [SerializeField] private float tapSpeed;
 
+    public GameObject projectilePrefab;
+
     private AudioManagerMini audioMan;
 
     public bool Sucking
@@ -56,17 +58,21 @@ public class PlayerCollider : MonoBehaviour
         {
             timeAtKeyDown = Time.time;
         }
-        else if (wasPreviouslyHeldDown && !inputHeldDown) // ended
+        else if (wasPreviouslyHeldDown && !inputHeldDown && holdingSomething) // ended
         {
+            holdingSomething = false;
             if (Time.time - timeAtKeyDown < tapSpeed)
             {
                 // tap
-                audioMan.Play("Hit");
+                //audioMan.Play("Swallow");
             }
             else
             {
                 // held
-                audioMan.Play("Pickup");
+                audioMan.Play("Shoot");
+                GameObject projectile = Instantiate(projectilePrefab);
+                projectile.transform.position = transform.position;
+                projectile.GetComponent<Projectile>().SetPlayer(gameObject);
             }
         }
     }
@@ -91,6 +97,9 @@ public class PlayerCollider : MonoBehaviour
                 holdingSomething = true;
             }
             else
+            {
+                audioMan.Play("Hit");
+            }
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
     }

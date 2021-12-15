@@ -5767,7 +5767,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   suckCooldownTime: 0.5
   suckActiveTime: 0.5
-  tapSpeed: 0.1
+  tapSpeed: 0.15
+  projectilePrefab: {fileID: 1170459986578694609, guid: aa56a6954b84c4f1080c3d298d483c44, type: 3}
   sucker: {fileID: 2038593124}
 --- !u!114 &2028172898
 MonoBehaviour:
@@ -5793,6 +5794,24 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Hit
     clip: {fileID: 8300000, guid: 8464aa2e1e6f946c3847e7257a0ea80c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    spatialBlend: 0
+    maxDistance: 0
+    rollOffMode: 0
+    source: {fileID: 0}
+  - name: Swallow
+    clip: {fileID: 8300000, guid: 7eb5d06388d054be5ad4836f46c3a84f, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    spatialBlend: 0
+    maxDistance: 0
+    rollOffMode: 0
+    source: {fileID: 0}
+  - name: Shoot
+    clip: {fileID: 8300000, guid: 25f79a5712ad24c63b6d07f0494ca131, type: 3}
     volume: 1
     pitch: 1
     loop: 0
