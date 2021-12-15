@@ -59,13 +59,13 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // flip rotation degress
-            currentRotation -= Mathf.PI;
-            DoRotation();
-            currentLane = laneThing.GetClosestLane(transform.position);
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    // flip rotation degress
+        //    currentRotation -= Mathf.PI;
+        //    DoRotation();
+        //    currentLane = laneThing.GetClosestLane(transform.position);
+        //}
 
         if (!snap)
         {
@@ -127,7 +127,6 @@ public class PlayerMovement : MonoBehaviour
             currentLane = laneThing.ChangeLanes(currentLane, false);
             shouldSnapNow = false;
             rotationInput = 0f;
-            Debug.Log("tapped right!");
             return false;
         }
         if (Input.GetKeyUp(KeyCode.LeftArrow))
@@ -135,7 +134,6 @@ public class PlayerMovement : MonoBehaviour
             currentLane = laneThing.ChangeLanes(currentLane, true);
             shouldSnapNow = false;
             rotationInput = 0f;
-            Debug.Log("tapped left!");
             return false;
         }
         return true;

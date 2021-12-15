@@ -5767,6 +5767,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   suckCooldownTime: 0.5
   suckActiveTime: 0.5
+  tapSpeed: 0.1
   sucker: {fileID: 2038593124}
 --- !u!114 &2028172898
 MonoBehaviour:

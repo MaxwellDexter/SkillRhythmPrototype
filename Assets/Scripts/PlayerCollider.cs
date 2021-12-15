@@ -9,7 +9,12 @@ public class PlayerCollider : MonoBehaviour
     private float suckingTime;
     private float suckCooldown;
 
-    private AudioManagerMini audio;
+    private bool holdingSomething;
+    private bool inputHeldDown = false;
+    private float timeAtKeyDown;
+    [SerializeField] private float tapSpeed;
+
+    private AudioManagerMini audioMan;
 
     public bool Sucking
     {
@@ -25,7 +30,7 @@ public class PlayerCollider : MonoBehaviour
 
     private void Start()
     {
-        audio = GetComponent<AudioManagerMini>();
+        audioMan = GetComponent<AudioManagerMini>();
     }
 
     private void Update()
@@ -34,7 +39,7 @@ public class PlayerCollider : MonoBehaviour
         suckingTime -= Time.deltaTime;
         suckCooldown -= Time.deltaTime;
 
-        if (CanSuck && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)))
+        if (CanSuck && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)))
         {
             suckingTime = suckActiveTime;
             sucker.SetActive(true);
@@ -44,26 +49,48 @@ public class PlayerCollider : MonoBehaviour
             suckCooldown = suckCooldownTime;
             sucker.SetActive(false);
         }
+
+        bool wasPreviouslyHeldDown = inputHeldDown;
+        inputHeldDown = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space);
+        if (!wasPreviouslyHeldDown && inputHeldDown && Sucking) // started
+        {
+            timeAtKeyDown = Time.time;
+        }
+        else if (wasPreviouslyHeldDown && !inputHeldDown) // ended
+        {
+            if (Time.time - timeAtKeyDown < tapSpeed)
+            {
+                // tap
+                audioMan.Play("Hit");
+            }
+            else
+            {
+                // held
+                audioMan.Play("Pickup");
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Obstacle"))
         {
-            audio.Play("Hit");
+            audioMan.Play("Hit");
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
         else if (other.CompareTag("Pickup"))
         {
-            audio.Play("Pickup");
+            audioMan.Play("Pickup");
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
         else if (other.CompareTag("Trash"))
         {
             if (Sucking)
-                audio.Play("Pickup");
+            {
+                audioMan.Play("Pickup");
+                holdingSomething = true;
+            }
             else
-                audio.Play("Hit");
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
     }
