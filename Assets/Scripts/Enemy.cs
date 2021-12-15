@@ -15,7 +15,7 @@ public class Enemy : InteractableThing
 
     public override void GetDoneSon()
     {
-        // add score here
+        GameObject.Find("Score Manager").GetComponent<ScoreManager>().AddBonus();
         SFXTempPlayer.Create(destroyClip, 0.9f);
         base.GetDoneSon();
     }

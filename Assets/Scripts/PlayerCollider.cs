@@ -18,6 +18,8 @@ public class PlayerCollider : MonoBehaviour
 
     private AudioManagerMini audioMan;
 
+    private ScoreManager score;
+
     public bool Sucking
     {
         get { return suckingTime > 0; }
@@ -33,6 +35,7 @@ public class PlayerCollider : MonoBehaviour
     private void Start()
     {
         audioMan = GetComponent<AudioManagerMini>();
+        score = GameObject.Find("Score Manager").GetComponent<ScoreManager>();
     }
 
     private void Update()
@@ -108,10 +111,12 @@ public class PlayerCollider : MonoBehaviour
     private void DoPickup()
     {
         audioMan.Play("Pickup");
+        score.Add();
     }
 
     private void DoHit()
     {
         audioMan.Play("Hit");
+        score.ResetStreak();
     }
 }

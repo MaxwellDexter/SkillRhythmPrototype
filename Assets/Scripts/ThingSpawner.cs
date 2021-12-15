@@ -95,7 +95,8 @@ public class ThingSpawner : MonoBehaviour
         }
 
         // add obstacles to fill the space
-        for (int i = 0; i < laneThing.laneAmount - 2; i++)
+        int obstacleAmount = laneThing.laneAmount - options.Count;
+        for (int i = 0; i < obstacleAmount; i++)
             options.Add(LaneOptions.Obstacle);
         // shuffle it
         // from https://forum.unity.com/threads/clever-way-to-shuffle-a-list-t-in-one-line-of-c-code.241052/
