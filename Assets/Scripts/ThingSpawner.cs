@@ -9,12 +9,16 @@ public class ThingSpawner : MonoBehaviour
     {
         Obstacle,
         Pickup,
-        Empty
+        Empty,
+        Trash,
+        Enemy
     }
 
     public GameObject player;
     public GameObject obstaclePrefab;
     public GameObject pickupPrefab;
+    public GameObject trashPrefab;
+    public GameObject enemyPrefab;
     public AudioSource music;
     public Tempo tempo;
     public Tempo subdivisionTempo;
@@ -72,8 +76,24 @@ public class ThingSpawner : MonoBehaviour
 
     private void SpawnWave()
     {
-        // make a list with an empty space and a pick up
-        List<LaneOptions> options = new List<LaneOptions> { LaneOptions.Pickup, LaneOptions.Empty };
+        List<LaneOptions> options = new List<LaneOptions>();
+
+        // ghghgh
+        float randVal = Random.Range(0f, 1f);
+        if (randVal > 0.75f)
+        {
+            options.Add(LaneOptions.Enemy);
+            options.Add(LaneOptions.Empty);
+        }
+        else if (randVal > 0.5)
+        {
+            options.Add(LaneOptions.Trash);
+        }
+        else
+        {
+            options.Add(LaneOptions.Pickup);
+        }
+
         // add obstacles to fill the space
         for (int i = 0; i < laneThing.laneAmount - 2; i++)
             options.Add(LaneOptions.Obstacle);
@@ -91,13 +111,19 @@ public class ThingSpawner : MonoBehaviour
             LaneOptions option = shuffled[i];
             switch (option)
             {
-                case LaneOptions.Empty:
-                    break;
                 case LaneOptions.Obstacle:
                     Spawn(obstaclePrefab, i);
                     break;
                 case LaneOptions.Pickup:
                     Spawn(pickupPrefab, i);
+                    break;
+                case LaneOptions.Trash:
+                    Spawn(trashPrefab, i);
+                    break;
+                case LaneOptions.Enemy:
+                    Spawn(enemyPrefab, i);
+                    break;
+                default:
                     break;
             }
         }

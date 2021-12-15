@@ -17,7 +17,7 @@ public class InteractableThing : MonoBehaviour
             GetDoneSon();
     }
 
-    public void GetDoneSon()
+    public virtual void GetDoneSon()
     {
         Destroy(gameObject);
     }

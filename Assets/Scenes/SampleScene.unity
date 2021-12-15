@@ -376,7 +376,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2028172889}
   obstaclePrefab: {fileID: 1170459986578694609, guid: 0a1ebe93484fe4139ae0ce025bdae699, type: 3}
-  pickupPrefab: {fileID: 1170459986578694609, guid: 1770aa286fb754339b7ec04ef86625cb, type: 3}
+  pickupPrefab: {fileID: 1170459986578694609, guid: 6e699a82ebe0f4be296780e3a7a41a88, type: 3}
+  trashPrefab: {fileID: 1170459986578694609, guid: 1770aa286fb754339b7ec04ef86625cb, type: 3}
+  enemyPrefab: {fileID: 1170459986578694609, guid: 21ebb454975324bf78e84d8c66d5cc18, type: 3}
   music: {fileID: 572070166}
   tempo: {fileID: 1273368861}
   subdivisionTempo: {fileID: 1480390067}

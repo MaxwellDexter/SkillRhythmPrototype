@@ -81,26 +81,37 @@ public class PlayerCollider : MonoBehaviour
     {
         if (other.CompareTag("Obstacle"))
         {
-            audioMan.Play("Hit");
+            DoHit();
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
         else if (other.CompareTag("Pickup"))
         {
-            audioMan.Play("Pickup");
+            if (Sucking)
+                DoPickup();
+            else
+                DoHit();
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
         else if (other.CompareTag("Trash"))
         {
             if (Sucking)
             {
-                audioMan.Play("Pickup");
+                DoPickup();
                 holdingSomething = true;
             }
             else
-            {
-                audioMan.Play("Hit");
-            }
+                DoHit();
             other.GetComponent<InteractableThing>().GetDoneSon();
         }
+    }
+
+    private void DoPickup()
+    {
+        audioMan.Play("Pickup");
+    }
+
+    private void DoHit()
+    {
+        audioMan.Play("Hit");
     }
 }
