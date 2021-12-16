@@ -43,8 +43,6 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // demo stuff
-        if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(0);
         if (Input.GetKeyDown(KeyCode.S))
             snap = !snap;
         if (Input.GetKeyDown(KeyCode.Q))
