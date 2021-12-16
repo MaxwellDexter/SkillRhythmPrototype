@@ -22,7 +22,8 @@ public class ThingSpawner : MonoBehaviour
     public AudioSource music;
     public Tempo tempo;
     public Tempo subdivisionTempo;
-    private bool musicStarted = false;
+
+    private bool spawnEnemy = false;
 
     public double spawnDistance;
 
@@ -78,20 +79,24 @@ public class ThingSpawner : MonoBehaviour
     {
         List<LaneOptions> options = new List<LaneOptions>();
 
-        // ghghgh
-        float randVal = Random.Range(0f, 1f);
-        if (randVal > 0.75f)
+        if (spawnEnemy)
         {
             options.Add(LaneOptions.Enemy);
             options.Add(LaneOptions.Empty);
-        }
-        else if (randVal > 0.5)
-        {
-            options.Add(LaneOptions.Trash);
+            spawnEnemy = false;
         }
         else
         {
-            options.Add(LaneOptions.Pickup);
+            float randVal = Random.Range(0f, 1f);
+            if (randVal > 0.7)
+            {
+                options.Add(LaneOptions.Trash);
+                spawnEnemy = true;
+            }
+            else
+            {
+                options.Add(LaneOptions.Pickup);
+            }
         }
 
         // add obstacles to fill the space
