@@ -13,12 +13,15 @@ public class Projectile : InteractableThing
 
     private void OnTriggerEnter(Collider other)
     {
-        var interact = other.GetComponent<InteractableThing>();
+        InteractableThing interact = other.GetComponent<InteractableThing>();
         if (interact != null)
         {
-            interact.GetDoneSon();
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+                enemy.DestroyEnemy();
+            else
+                interact.GetDoneSon();
             GetDoneSon();
-            // todo spawn audio player?
         }
     }
 

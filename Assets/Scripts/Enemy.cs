@@ -11,15 +11,15 @@ public class Enemy : InteractableThing
     {
         transform.Rotate(new Vector3(0, 0.5f, 0));
         if (transform.position.z < player.transform.position.z - 10)
-            Destroy(gameObject);
+            GetDoneSon();
     }
 
-    public override void GetDoneSon()
+    public void DestroyEnemy()
     {
         GameObject.Find("Score Manager").GetComponent<ScoreManager>().AddBonus();
         SFXTempPlayer.Create(destroyClip, 0.9f);
         GameObject fx = Instantiate(destroyObject);
         fx.transform.position = transform.position;
-        base.GetDoneSon();
+        GetDoneSon();
     }
 }

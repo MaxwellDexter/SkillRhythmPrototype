@@ -1316,6 +1316,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   regularScoreAddition: 10
   bonusScoreAddition: 100
+  scorePrefab: {fileID: 1018096422850543539, guid: 6ee093c56f6aa409e9d35c0ded6334d7, type: 3}
+  bonusPrefab: {fileID: 1018096422850543539, guid: 211712b46290c4ac5994672407562264, type: 3}
 --- !u!4 &1769408635
 Transform:
   m_ObjectHideFlags: 0

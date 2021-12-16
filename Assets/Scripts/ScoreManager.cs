@@ -5,6 +5,9 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private int regularScoreAddition;
     [SerializeField] private int bonusScoreAddition;
 
+    public GameObject scorePrefab;
+    public GameObject bonusPrefab;
+
     private int score;
     private int streak;
     private int hiStreak;
@@ -20,11 +23,13 @@ public class ScoreManager : MonoBehaviour
     public void Add()
     {
         Add(regularScoreAddition);
+        SpawnScoreText(regularScoreAddition, scorePrefab);
     }
 
     public void AddBonus()
     {
         Add(bonusScoreAddition);
+        SpawnScoreText(bonusScoreAddition, bonusPrefab);
     }
 
     private void Add(int score)
@@ -46,5 +51,11 @@ public class ScoreManager : MonoBehaviour
     {
         streak = 0;
         StreakChangedEvent.Invoke(streak);
+    }
+
+    public void SpawnScoreText(int scoreAmount, GameObject prefab)
+    {
+        GameObject text = Instantiate(prefab);
+        text.GetComponent<TextMesh>().text = $"+{scoreAmount}";
     }
 }
