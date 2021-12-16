@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : InteractableThing
 {
     public AudioClip destroyClip;
+    public GameObject destroyObject;
 
     private void Update()
     {
@@ -17,6 +18,8 @@ public class Enemy : InteractableThing
     {
         GameObject.Find("Score Manager").GetComponent<ScoreManager>().AddBonus();
         SFXTempPlayer.Create(destroyClip, 0.9f);
+        GameObject fx = Instantiate(destroyObject);
+        fx.transform.position = transform.position;
         base.GetDoneSon();
     }
 }
