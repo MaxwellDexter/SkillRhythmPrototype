@@ -16,18 +16,14 @@ public class Projectile : InteractableThing
         InteractableThing interact = other.GetComponent<InteractableThing>();
         if (interact != null)
         {
-            Enemy enemy = other.GetComponent<Enemy>();
-            if (enemy != null)
-                enemy.DestroyEnemy();
-            else
-                interact.GetDoneSon();
-            GetDoneSon();
+            interact.BlowUp();
+            DestroyMe();
         }
     }
 
     private void Update()
     {
         if (transform.position.z > player.transform.position.z + 60)
-            GetDoneSon();
+            DestroyMe();
     }
 }

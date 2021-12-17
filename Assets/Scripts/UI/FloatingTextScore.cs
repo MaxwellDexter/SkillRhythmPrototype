@@ -16,7 +16,7 @@ public class FloatingTextScore : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        transform.position = player.transform.position;
+        transform.position = player.transform.position / 2;
         textMesh = GetComponent<TextMesh>();
         StartCoroutine(StartColourChange());
     }

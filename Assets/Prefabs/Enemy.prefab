@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyClip: {fileID: 8300000, guid: 7bde5c3765e8c4b339b6c320c9a3360e, type: 3}
+  addScoreOnDestroy: 1
   destroyObject: {fileID: 8076776145023298811, guid: 902ad20ac99ce4731aaf42e76d84fd4d, type: 3}
 --- !u!1 &1566869840529857139
 GameObject:

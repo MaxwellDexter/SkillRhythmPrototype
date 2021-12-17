@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractableThing : MonoBehaviour
 {
+    public AudioClip destroyClip;
+    public bool addScoreOnDestroy;
+
     protected GameObject player;
 
     public void SetPlayer(GameObject player)
@@ -14,11 +15,19 @@ public class InteractableThing : MonoBehaviour
     private void Update()
     {
         if (transform.position.z < player.transform.position.z - 10)
-            GetDoneSon();
+            DestroyMe();
     }
 
-    public virtual void GetDoneSon()
+    public virtual void DestroyMe()
     {
+        Destroy(gameObject);
+    }
+
+    public virtual void BlowUp()
+    {
+        if (addScoreOnDestroy)
+            GameObject.Find("Score Manager").GetComponent<ScoreManager>().Add();
+        SFXTempPlayer.Create(destroyClip, 0.9f);
         Destroy(gameObject);
     }
 }

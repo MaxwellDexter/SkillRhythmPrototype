@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -16,6 +14,7 @@ public class PlayerCollider : MonoBehaviour
     [SerializeField] private float tapSpeed;
 
     public GameObject projectilePrefab;
+    public GameObject projectileVisualiser;
 
     private AudioManagerMini audioMan;
 
@@ -79,6 +78,8 @@ public class PlayerCollider : MonoBehaviour
                 projectile.GetComponent<Projectile>().SetPlayer(gameObject);
             }
         }
+
+        projectileVisualiser.SetActive(holdingSomething);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -86,7 +87,7 @@ public class PlayerCollider : MonoBehaviour
         if (other.CompareTag("Obstacle"))
         {
             DoHit();
-            other.GetComponent<InteractableThing>().GetDoneSon();
+            other.GetComponent<InteractableThing>().DestroyMe();
         }
         else if (other.CompareTag("Pickup"))
         {
@@ -94,7 +95,7 @@ public class PlayerCollider : MonoBehaviour
                 DoPickup();
             else
                 DoHit();
-            other.GetComponent<InteractableThing>().GetDoneSon();
+            other.GetComponent<InteractableThing>().DestroyMe();
         }
         else if (other.CompareTag("Trash"))
         {
@@ -105,7 +106,7 @@ public class PlayerCollider : MonoBehaviour
             }
             else
                 DoHit();
-            other.GetComponent<InteractableThing>().GetDoneSon();
+            other.GetComponent<InteractableThing>().DestroyMe();
         }
     }
 
