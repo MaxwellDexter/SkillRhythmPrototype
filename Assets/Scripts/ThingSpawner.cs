@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ThingSpawner : MonoBehaviour
 {
@@ -68,10 +69,13 @@ public class ThingSpawner : MonoBehaviour
     {
         if (timeAtLastSpawn + timeBetweenSpawns < AudioSettings.dspTime)
         {
-            
-
             // update time
             timeAtLastSpawn = AudioSettings.dspTime;
+        }
+
+        if (!music.isPlaying)
+        {
+            SceneManager.LoadScene(0);
         }
     }
 
