@@ -1,6 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -51,7 +50,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (quantise)
         {
-            inputDirection = Input.GetAxisRaw("Horizontal");
+            float rawInput = Input.GetAxisRaw("Horizontal");
+            if (rawInput != 0f)
+                inputDirection = rawInput;
             return;
         }
 
@@ -232,12 +233,17 @@ public class PlayerMovement : MonoBehaviour
             bool goingRight = inputDirection < 0;
             currentLane = laneThing.ChangeLanes(currentLane, goingRight);
             Vector3 newpos = laneThing.GetLanePos(currentLane);
-            newpos.z = transform.position.z;
-            transform.position = newpos;
+            //newpos.z = transform.position.z;
+            float time = (float)TempoUtils.GetSecondsFromMilliseconds(60);
+            transform.DOMoveX(newpos.x, time);
+            transform.DOMoveY(newpos.y, time);
 
             // rotate
             currentRotation = GetDirection();
             RotatePlayerTowardsCenter();
+
+            // reset it
+            inputDirection = 0f;
         }
     }
 }
