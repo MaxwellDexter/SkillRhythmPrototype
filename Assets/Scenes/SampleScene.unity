@@ -6470,8 +6470,9 @@ MonoBehaviour:
   spawner: {fileID: 936865502}
   snap: 0
   snapSpeed: 20
-  tapSpeed: 0.2
-  quantise: 0
+  tapSpeed: 0.1
+  quantise: 1
+  quantiseMoveSpeed: 0.1
   subdivisionTempo: {fileID: 1480390067}
 --- !u!65 &2028172891
 BoxCollider:

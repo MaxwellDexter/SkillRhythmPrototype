@@ -26,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     private bool quantise;
+    [SerializeField] private float quantiseMoveSpeed;
+    private float quantiseHoldTime;
+    private bool holding;
     private float inputDirection;
     public Tempo subdivisionTempo;
     private SequenceContainer audioClip;
@@ -35,8 +38,13 @@ public class PlayerMovement : MonoBehaviour
         laneThing = GetComponent<LaneThing>();
         currentRotation = 0f;
         moveSpeed = 19.8f;//(float)(spawner.spawnDistance / (TempoUtils.FlipBpmInterval(45) * 2));
-        subdivisionTempo.OnTempoBeat += DoQuantiseMovement;
+        subdivisionTempo.OnTempoBeat += FakeMethod;
         audioClip = GetComponent<SequenceContainer>();
+    }
+
+    private void FakeMethod()
+    {
+
     }
 
     private void Update()
@@ -48,39 +56,50 @@ public class PlayerMovement : MonoBehaviour
             quantise = !quantise;
         // end demo stuff
 
-        if (quantise)
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            float rawInput = Input.GetAxisRaw("Horizontal");
-            if (rawInput != 0f)
-                inputDirection = rawInput;
-            return;
+            // flip rotation degress
+            currentRotation -= Mathf.PI;
+            DoRotation();
+            currentLane = laneThing.GetClosestLane(transform.position);
         }
 
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    // flip rotation degress
-        //    currentRotation -= Mathf.PI;
-        //    DoRotation();
-        //    currentLane = laneThing.GetClosestLane(transform.position);
-        //}
-
-        if (!snap)
+        if (!quantise)
         {
             GetRotateInput();
             return;
         }
+        else
+        {
+            if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
+            {
+                holding = false;
+                if (Time.time - tapTime < tapSpeed)
+                {
+                    DoQuantiseMovement();
+                }
+                inputDirection = 0f;
+            }
 
-        // on key down start timer
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
-            tapTime = Time.time;
+            // on key down start timer
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                tapTime = Time.time;
+                quantiseHoldTime = Time.time;
+                holding = true;
+                inputDirection = Input.GetKeyDown(KeyCode.RightArrow) ? 1f : -1f;
+            }
 
-        bool shouldRotate = true;
-        // else check for key up and if less than speed do tap
-        if (Time.time - tapTime < tapSpeed)
-            shouldRotate = TapReleaseCheck();
-        // but rotate anyway
-        if (shouldRotate)
-            GetRotateInput();
+            if (holding)
+            {
+                if (Time.time - quantiseHoldTime >= quantiseMoveSpeed)
+                {
+                    DoQuantiseMovement();
+                    // restart quantise holdtime
+                    quantiseHoldTime = Time.time;
+                }
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -124,16 +143,16 @@ public class PlayerMovement : MonoBehaviour
             currentLane = laneThing.ChangeLanes(currentLane, false);
             shouldSnapNow = false;
             rotationInput = 0f;
-            return false;
+            return true;
         }
         if (Input.GetKeyUp(KeyCode.LeftArrow))
         {
             currentLane = laneThing.ChangeLanes(currentLane, true);
             shouldSnapNow = false;
             rotationInput = 0f;
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void RotatePlayer()
@@ -218,9 +237,7 @@ public class PlayerMovement : MonoBehaviour
             }
             if (rotationInput == 0f) // if not moving
             {
-                Vector3 newpos = Vector3.Lerp(pos, laneThing.GetLanePos(currentLane), snapSpeed * Mathf.Clamp01(Time.fixedDeltaTime));
-                newpos.z = transform.position.z;
-                transform.position = newpos;
+                DoSnapToLane();
             }
         }
     }
@@ -229,21 +246,22 @@ public class PlayerMovement : MonoBehaviour
     {
         if (inputDirection != 0f)
         {
-            audioClip.Play();
+            //audioClip.Play();
             bool goingRight = inputDirection < 0;
             currentLane = laneThing.ChangeLanes(currentLane, goingRight);
-            Vector3 newpos = laneThing.GetLanePos(currentLane);
-            //newpos.z = transform.position.z;
-            float time = (float)TempoUtils.GetSecondsFromMilliseconds(60);
-            transform.DOMoveX(newpos.x, time);
-            transform.DOMoveY(newpos.y, time);
+            DoSnapToLane();
 
             // rotate
             currentRotation = GetDirection();
             RotatePlayerTowardsCenter();
-
-            // reset it
-            inputDirection = 0f;
         }
+    }
+
+    private void DoSnapToLane()
+    {
+        Vector2 newpos = laneThing.GetLanePos(currentLane);
+        float time = (float)TempoUtils.GetSecondsFromMilliseconds(60);
+        transform.DOMoveX(newpos.x, time);
+        transform.DOMoveY(newpos.y, time);
     }
 }
