@@ -25,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
     private float tapTime;
 
     [SerializeField]
+    private bool invert;
+
+    [SerializeField]
     private bool quantise;
     [SerializeField] private float quantiseMoveSpeed;
     private float quantiseHoldTime;
@@ -54,15 +57,17 @@ public class PlayerMovement : MonoBehaviour
             snap = !snap;
         if (Input.GetKeyDown(KeyCode.Q))
             quantise = !quantise;
+        if (Input.GetKeyDown(KeyCode.I))
+            invert = !invert;
         // end demo stuff
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            // flip rotation degress
-            currentRotation -= Mathf.PI;
-            DoRotation();
-            currentLane = laneThing.GetClosestLane(transform.position);
-        }
+        //if (Input.GetKeyDown(KeyCode.DownArrow))
+        //{
+        //    // flip rotation degress
+        //    currentRotation -= Mathf.PI;
+        //    DoRotation();
+        //    currentLane = laneThing.GetClosestLane(transform.position);
+        //}
 
         if (!quantise)
         {
@@ -88,6 +93,12 @@ public class PlayerMovement : MonoBehaviour
                 quantiseHoldTime = Time.time;
                 holding = true;
                 inputDirection = Input.GetKeyDown(KeyCode.RightArrow) ? 1f : -1f;
+                if (invert)
+                {
+                    if (inputDirection < 0)
+                        inputDirection = 1f;
+                    else inputDirection = -1f;
+                }
             }
 
             if (holding)
@@ -120,11 +131,11 @@ public class PlayerMovement : MonoBehaviour
         rotationInput = 0f;
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            rotationInput = -rotateSpeed;
+            rotationInput = rotateSpeed * (invert ? -1f : 1f);
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
-            rotationInput = rotateSpeed;
+            rotationInput = rotateSpeed * (invert ? 1f : -1f);
         }
 
         if (wasMoving && rotationInput == 0f)

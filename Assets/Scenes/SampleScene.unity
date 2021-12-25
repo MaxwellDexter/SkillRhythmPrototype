@@ -6471,6 +6471,7 @@ MonoBehaviour:
   snap: 0
   snapSpeed: 20
   tapSpeed: 0.1
+  invert: 0
   quantise: 1
   quantiseMoveSpeed: 0.1
   subdivisionTempo: {fileID: 1480390067}
