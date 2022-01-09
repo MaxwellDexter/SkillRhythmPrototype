@@ -780,6 +780,8 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 5.5}
   leanAmount: 1
   leanSpeed: 3
+  rotateWith: 1
+  rotateTweenSpeed: 2.79
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6471,8 +6473,8 @@ MonoBehaviour:
   snap: 0
   snapSpeed: 20
   tapSpeed: 0.1
-  invert: 0
-  quantise: 1
+  invert: 1
+  quantise: 0
   quantiseMoveSpeed: 0.1
   subdivisionTempo: {fileID: 1480390067}
 --- !u!65 &2028172891

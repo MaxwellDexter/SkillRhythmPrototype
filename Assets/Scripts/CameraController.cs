@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
     public Vector3 offset;
     public float leanAmount;
     public float leanSpeed;
+    public bool rotateWith;
+    public float rotateTweenSpeed = 0.1f;
 
     private void LateUpdate()
     {
@@ -21,5 +23,15 @@ public class CameraController : MonoBehaviour
         newpos.z = focus.transform.position.z - offset.z;
         transform.position = newpos;
         transform.LookAt(middle);
+
+        if (rotateWith)
+        {
+            // rotate camera based on player position
+            Vector3 currentRot = transform.rotation.eulerAngles;
+            currentRot.z = focus.transform.rotation.eulerAngles.z + 90;
+            //Vector3 newRot = Vector3.Lerp(transform.rotation.eulerAngles, currentRot, rotateTweenSpeed * Time.deltaTime);
+            //transform.rotation = Quaternion.Euler(newRot);
+            transform.rotation = Quaternion.Euler(currentRot);
+        }
     }
 }
