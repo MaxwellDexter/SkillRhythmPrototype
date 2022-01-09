@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
                 tapTime = Time.time;
                 quantiseHoldTime = Time.time;
                 holding = true;
-                inputDirection = Input.GetKeyDown(KeyCode.RightArrow) ? 1f : -1f;
+                inputDirection = Input.GetKeyDown(KeyCode.RightArrow) ? -1f : 1f;
                 if (invert)
                 {
                     if (inputDirection < 0)
