@@ -6468,14 +6468,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 25
   currentLane: 0
-  rotateSpeed: 3.5
+  rotateSpeed: 2.5
   spawner: {fileID: 936865502}
   snap: 0
   snapSpeed: 20
-  tapSpeed: 0.1
   invert: 1
-  quantise: 0
-  quantiseMoveSpeed: 0.1
+  tiltMod: 10
   subdivisionTempo: {fileID: 1480390067}
 --- !u!65 &2028172891
 BoxCollider:
