@@ -780,7 +780,7 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 5.5}
   leanAmount: 1
   leanSpeed: 3
-  rotateWith: 1
+  rotateWith: 0
   rotateTweenSpeed: 2.79
 --- !u!114 &963194230
 MonoBehaviour:
