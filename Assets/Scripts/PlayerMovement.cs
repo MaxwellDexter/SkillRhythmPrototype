@@ -35,6 +35,9 @@ public class PlayerMovement : MonoBehaviour
         moveSpeed = 19.8f;//(float)(spawner.spawnDistance / (TempoUtils.FlipBpmInterval(45) * 2));
         subdivisionTempo.OnTempoBeat += FakeMethod;
         audioClip = GetComponent<SequenceContainer>();
+
+        currentRotation = 0f;
+        DoRotation();
     }
 
     private void FakeMethod()
