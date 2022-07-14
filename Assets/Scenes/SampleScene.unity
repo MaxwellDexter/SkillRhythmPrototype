@@ -6870,7 +6870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 25
   currentLane: 0
-  rotateSpeed: 2.5
+  rotateSpeed: 3
   spawner: {fileID: 936865502}
   snap: 0
   snapSpeed: 20
